@@ -1,39 +1,41 @@
-const board = document.createElement('div')
-const main = document.getElementById('container')
-const whitePeice = new Image();
-const blackPeice = new Image();
+const board = document.createElement('div');
+const main = document.getElementById('container');
+const blackPiece = new Image();
 
+blackPiece.src = 'assets/—Pngtree—circle clipart black circle_5553148.png';
+blackPiece.draggable = true; // Set the black piece as draggable
 
-
-whitePeice.src = 'assets/Download White Circle PNG.jpg';
-blackPeice.src = 'assets/—Pngtree—circle clipart black circle_5553148.png';
-
-
-board.classList.add('board')
-whitePeice.classList.add('white-peice')
-blackPeice.classList.add('black-peice')
+board.classList.add('board');
+blackPiece.classList.add('black-piece');
 
 function makeBoard() {
     for (let i = 0; i < 64; i++) {
-        const boardSquares = document.createElement('div')
-        boardSquares.classList.add('board-square')
-        board.appendChild(boardSquares)
-
+        const boardSquare = document.createElement('div');
+        boardSquare.classList.add('board-square');
+        boardSquare.id = 'square' + i;
+        boardSquare.addEventListener('dragover', function(event) {
+            event.preventDefault();
+        });
+        boardSquare.addEventListener('drop', function(event) {
+            event.preventDefault();
+            const squareId = this.id;
+            console.log("Black piece dropped on square:", squareId);
+        });
+        board.appendChild(boardSquare);
     }
-    document.body.appendChild(blackPeice)
-    main.appendChild(board)
+    main.appendChild(board);
+    main.appendChild(blackPiece); // Append black piece
 }
-makeBoard()
 
+makeBoard();
 
-
-
-
+// jQuery for dragstart event
 $(document).ready(function () {
-    $(".black-piece").draggable();
-    $(".board-square").droppable({
-        drop: function(event, ui) {
-            $(this).addClass("ui-state-highlight").find("p").html("Dropped!");
-        }
+    console.log("Document ready.");
+    
+    // Check if black-piece is draggable
+    $(".black-piece").on('dragstart', function(event) {
+        console.log("Drag event started.");
+        event.originalEvent.dataTransfer.setData("text/plain", "black-piece");
     });
 });
