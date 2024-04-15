@@ -1,12 +1,14 @@
 const board = document.createElement('div');
 const main = document.getElementById('container');
+const whitePiece = new Image();
 const blackPiece = new Image();
 
+whitePiece.src = 'assets/Download White Circle PNG.jpg';
 blackPiece.src = 'assets/—Pngtree—circle clipart black circle_5553148.png';
-blackPiece.draggable = true; // Set the black piece as draggable
 
 board.classList.add('board');
-blackPiece.classList.add('black-piece');
+whitePiece.classList.add('white-piece');
+blackPiece.classList.add('black-piece'); 
 
 function makeBoard() {
     for (let i = 0; i < 64; i++) {
@@ -19,23 +21,26 @@ function makeBoard() {
         boardSquare.addEventListener('drop', function(event) {
             event.preventDefault();
             const squareId = this.id;
-            console.log("Black piece dropped on square:", squareId);
+            console.log("Piece dropped on square:", squareId);
         });
         board.appendChild(boardSquare);
     }
     main.appendChild(board);
-    main.appendChild(blackPiece); // Append black piece
+    main.appendChild(blackPiece); 
 }
 
 makeBoard();
+console.log( $(".board-square"))
 
-// jQuery for dragstart event
 $(document).ready(function () {
-    console.log("Document ready.");
+    $(".black-piece").draggable();
+    $(".board-square").droppable({
     
-    // Check if black-piece is draggable
-    $(".black-piece").on('dragstart', function(event) {
-        console.log("Drag event started.");
-        event.originalEvent.dataTransfer.setData("text/plain", "black-piece");
+        drop: function(event, ui) {
+            const squareId = $(this).attr("id");
+            console.log("Black piece dropped on square:", squareId);
+            $(this).addClass("ui-state-highlight").find("p").html("Dropped!");
+            
+        }
     });
 });
