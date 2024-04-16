@@ -1,0 +1,9 @@
+I want to figure out how to get a turn based system set up
+
+
+
+
+
+I want to make it so pieces can jump when available
+
+I want to make it so a 3 in a row gets 1 point
