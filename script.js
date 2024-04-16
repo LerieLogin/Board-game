@@ -1,5 +1,7 @@
 const board = document.createElement('div');
 const main = document.getElementById('container');
+const btn = document.getElementById('submit-score')
+let isWhiteTurn = true
 
 
 board.classList.add('board');
@@ -14,47 +16,139 @@ function makeBoard() {
             event.preventDefault();
             const squareId = this.id;
             const pieceContainer = this;
-            if (pieceContainer.children.length === 0) { // Check if the square has no child elements
-                const blackPiece = document.createElement('div');
-                blackPiece.classList.add('black-piece');
-                pieceContainer.appendChild(blackPiece); // Append the black piece directly to the clicked square
-                console.log("Piece placed on square:", squareId);
-            } else {
-                console.log('There is already a piece there.');
-            }
-        });
-        $(".board-square").on("click", function() {
-            const clickedSquare = $(this);
-            const piece = clickedSquare.children('.piece');
-            
-            // Remove highlight from previously clicked pieces and squares
-            $(".piece-clicked").removeClass("piece-clicked");
-            $(".square-can-jump").removeClass("square-can-jump");
-            
-            if (piece.length > 0) {
-                const nextSquareId = getNextSquareId(clickedSquare); // Implement getNextSquareId function to get the ID of the square on the other side
-                
-                if (nextSquareId && $('#' + nextSquareId).children('.piece').length === 0) {
-                    // Highlight the clicked piece
-                    piece.addClass("piece-clicked");
-                    
-                    // Highlight the square that can be jumped to
-                    $('#' + nextSquareId).addClass("square-can-jump");
+            if (isWhiteTurn) {
+                console.log('white turn')
+                if (pieceContainer.children.length === 0) { // Check if the square has no child elements
+                    const whitePiece = document.createElement('div');
+                    whitePiece.classList.add('white-piece');
+                    pieceContainer.appendChild(whitePiece); // Append the black piece directly to the clicked square
+                    console.log("Piece placed on square:", squareId);
+                } else {
+                    console.log('There is already a piece there.');
                 }
+                isWhiteTurn = false
+            } else {
+                console.log('black turn')
+                if (pieceContainer.children.length === 0) { // Check if the square has no child elements
+                    const blackPiece = document.createElement('div');
+                    blackPiece.classList.add('black-piece');
+                    pieceContainer.appendChild(blackPiece); // Append the black piece directly to the clicked square
+                    console.log("Piece placed on square:", squareId);
+                } else {
+                    console.log('There is already a piece there.');
+                }
+                isWhiteTurn = true
             }
         });
         
-        function getNextSquareId(clickedSquare) {
-            // Implement logic to determine the ID of the square on the other side
-            // For example, if the clicked square has ID squareX, the next square could have ID squareX + 2 or squareX - 2
-            // You'll need to adjust this logic based on your specific board layout
-        }
+        
+        
         board.appendChild(boardSquare);
     }
     main.appendChild(board);
         
 }
 
+
 makeBoard();
+
+function fourRowCheck() {
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 6; col++) {
+            const square1 = document.getElementById(`square${row * 8 + col}`);
+            const square2 = document.getElementById(`square${row * 8 + col - 1}`);
+            const square3 = document.getElementById(`square${row * 8 + col - 2}`);
+            const square4 = document.getElementById(`square${row * 8 + col - 3}`);
+        }
+    }
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 6; col++) {
+            const square1 = document.getElementById(`square${row * 8 + col}`);
+            const square2 = document.getElementById(`square${row * 8 + col + 1}`);
+            const square3 = document.getElementById(`square${row * 8 + col + 2}`);
+            const square4 = document.getElementById(`square${row * 8 + col + 3}`);
+        }
+    }
+}
+
+function calculateScores() {
+    // Check horizontally
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 6; col++) {
+            const square1 = document.getElementById(`square${row * 8 + col}`);
+            const square2 = document.getElementById(`square${row * 8 + col + 1}`);
+            const square3 = document.getElementById(`square${row * 8 + col + 2}`);
+            
+            if (square1 && square2 && square3) {
+                const piece1 = square1.querySelector('.black-piece') ? 'black' : square1.querySelector('.white-piece') ? 'white' : null;
+                const piece2 = square2.querySelector('.black-piece') ? 'black' : square2.querySelector('.white-piece') ? 'white' : null;
+                const piece3 = square3.querySelector('.black-piece') ? 'black' : square3.querySelector('.white-piece') ? 'white' : null;
+                
+                if (piece1 && piece2 && piece3 && piece1 === piece2 && piece2 === piece3) {
+                    console.log(`Three ${piece1} pieces found horizontally.`);
+                }
+            }
+        }
+    }
+
+    // Check vertically
+    for (let col = 0; col < 8; col++) {
+        for (let row = 0; row < 6; row++) {
+            const square1 = document.getElementById(`square${row * 8 + col}`);
+            const square2 = document.getElementById(`square${(row + 1) * 8 + col}`);
+            const square3 = document.getElementById(`square${(row + 2) * 8 + col}`);
+            
+            if (square1 && square2 && square3) {
+                const piece1 = square1.querySelector('.black-piece') ? 'black' : square1.querySelector('.white-piece') ? 'white' : null;
+                const piece2 = square2.querySelector('.black-piece') ? 'black' : square2.querySelector('.white-piece') ? 'white' : null;
+                const piece3 = square3.querySelector('.black-piece') ? 'black' : square3.querySelector('.white-piece') ? 'white' : null;
+                
+                if (piece1 && piece2 && piece3 && piece1 === piece2 && piece2 === piece3) {
+                    console.log(`Three ${piece1} pieces found vertically.`);
+                }
+            }
+        }
+    }
+
+    // Check diagonally (top-left to bottom-right)
+    for (let row = 0; row < 6; row++) {
+        for (let col = 0; col < 6; col++) {
+            const square1 = document.getElementById(`square${row * 8 + col}`);
+            const square2 = document.getElementById(`square${(row + 1) * 8 + col + 1}`);
+            const square3 = document.getElementById(`square${(row + 2) * 8 + col + 2}`);
+            
+            if (square1 && square2 && square3) {
+                const piece1 = square1.querySelector('.black-piece') ? 'black' : square1.querySelector('.white-piece') ? 'white' : null;
+                const piece2 = square2.querySelector('.black-piece') ? 'black' : square2.querySelector('.white-piece') ? 'white' : null;
+                const piece3 = square3.querySelector('.black-piece') ? 'black' : square3.querySelector('.white-piece') ? 'white' : null;
+                
+                if (piece1 && piece2 && piece3 && piece1 === piece2 && piece2 === piece3) {
+                    console.log(`Three ${piece1} pieces found diagonally (top-left to bottom-right).`);
+                }
+            }
+        }
+    }
+
+    // Check diagonally (top-right to bottom-left)
+    for (let row = 0; row < 6; row++) {
+        for (let col = 2; col < 8; col++) {
+            const square1 = document.getElementById(`square${row * 8 + col}`);
+            const square2 = document.getElementById(`square${(row + 1) * 8 + col - 1}`);
+            const square3 = document.getElementById(`square${(row + 2) * 8 + col - 2}`);
+            
+            if (square1 && square2 && square3) {
+                const piece1 = square1.querySelector('.black-piece') ? 'black' : square1.querySelector('.white-piece') ? 'white' : null;
+                const piece2 = square2.querySelector('.black-piece') ? 'black' : square2.querySelector('.white-piece') ? 'white' : null;
+                const piece3 = square3.querySelector('.black-piece') ? 'black' : square3.querySelector('.white-piece') ? 'white' : null;
+                
+                if (piece1 && piece2 && piece3 && piece1 === piece2 && piece2 === piece3) {
+                    console.log(`Three ${piece1} pieces found diagonally (top-right to bottom-left).`);
+                }
+            }
+        }
+    }
+}
+
+btn.addEventListener('click', calculateScores)
 
 
