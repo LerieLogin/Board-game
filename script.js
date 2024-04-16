@@ -59,6 +59,15 @@ function fourRowCheck() {
             const square2 = document.getElementById(`square${row * 8 + col - 1}`);
             const square3 = document.getElementById(`square${row * 8 + col - 2}`);
             const square4 = document.getElementById(`square${row * 8 + col - 3}`);
+
+            if (square1 && square2 && square3 && square4) {
+                const piece1 = square1.querySelector('.black-piece') ? 'black' : square1.querySelector('.white-piece') ? 'white' : null;
+                const piece2 = square2.querySelector('.black-piece') ? 'black' : square2.querySelector('.white-piece') ? 'white' : null;
+                const piece3 = square3.querySelector('.black-piece') ? 'black' : square3.querySelector('.white-piece') ? 'white' : null;
+                const piece4 = square4.querySelector('.black-piece') ? 'black' : square4.querySelector('.white-piece') ? 'white' : null;
+
+                //make if block
+            }
         }
     }
     for (let row = 0; row < 8; row++) {
