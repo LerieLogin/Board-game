@@ -114,6 +114,31 @@ function fourRowCheck() {
     for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 6; col++) {
             const square1 = document.getElementById(`square${row * 8 + col}`);
+            const square2 = document.getElementById(`square${(row + 1) * 8 + col}`);
+            const square3 = document.getElementById(`square${(row + 2) * 8 + col}`);
+            const square4 = document.getElementById(`square${(row + 3) * 8 + col}`);
+
+            if (square1 && square2 && square3 && square4) {
+                const piece1 = square1.querySelector('.black-piece') ? 'black' : square1.querySelector('.white-piece') ? 'white' : null;
+                const piece2 = square2.querySelector('.black-piece') ? 'black' : square2.querySelector('.white-piece') ? 'white' : null;
+                const piece3 = square3.querySelector('.black-piece') ? 'black' : square3.querySelector('.white-piece') ? 'white' : null;
+                const piece4 = square4.querySelector('.black-piece') ? 'black' : square4.querySelector('.white-piece') ? 'white' : null;
+
+                //make if block
+                
+                if (piece1 && piece2 && piece3 && piece4 && piece1 == piece2 && piece2 == piece3 && piece3 == piece4) {
+                    console.log('four in a row');
+                    lastPlacedSquare.removeChild(lastPlacedPiece);
+                    isWhiteTurn = !isWhiteTurn; // Toggle the turn
+                    return;
+                }
+            }        
+        }
+    }
+
+    for (let row = 0; row < 8; row++) {
+        for (let col = 0; col < 6; col++) {
+            const square1 = document.getElementById(`square${row * 8 + col}`);
             const square2 = document.getElementById(`square${(row + 1) * 8 + col + 1}`);
             const square3 = document.getElementById(`square${(row + 2) * 8 + col + 2}`);
             const square4 = document.getElementById(`square${(row + 3) * 8 + col + 3}`);
