@@ -74,7 +74,7 @@ function capturePiece(clickedSquare) {
 
   // Reset background color of all squares
   const squares = document.querySelectorAll('.board-square');
-  squares.forEach(square => square.style.backgroundColor = '');
+  // squares.forEach(square => square.style.backgroundColor = '');
 
   // Highlight the clicked square
   clickedSquare.style.backgroundColor = 'yellow';
@@ -100,14 +100,14 @@ function capturePiece(clickedSquare) {
 }
 
 function checkCaptureOption(row, col, rowDir, colDir, pieceColor) {
-  const square1 = document.getElementById(`square-${row}-${col}`);
-  const square2 = document.getElementById(`square-${row + rowDir}-${col + colDir}`);
-  const square3 = document.getElementById(`square-${row + 2 * rowDir}-${col + 2 * colDir}`);
+  let square1 = document.getElementById(`square-${row}-${col}`);
+  let square2 = document.getElementById(`square-${row + rowDir}-${col + colDir}`);
+  let square3 = document.getElementById(`square-${row + 2 * rowDir}-${col + 2 * colDir}`);
 
   if (square1 && square2 && square3) {
-    const piece1 = square1.querySelector('.black-piece, .white-piece');
-    const piece2 = square2.querySelector('.black-piece, .white-piece');
-    const piece3 = square3.querySelector('.black-piece, .white-piece');
+    let piece1 = square1.querySelector('.black-piece, .white-piece');
+    let piece2 = square2.querySelector('.black-piece, .white-piece');
+    let piece3 = square3.querySelector('.black-piece, .white-piece');
 
     if (piece1 && piece2 && !piece3 && piece2.classList.contains(pieceColor === 'white' ? 'black-piece' : 'white-piece')) {
       // Highlight the third square as a capture option
@@ -124,6 +124,7 @@ function checkCaptureOption(row, col, rowDir, colDir, pieceColor) {
       
           resetBackgroundColors();
           squareCheck()
+          
         }
       });
       
@@ -131,6 +132,8 @@ function checkCaptureOption(row, col, rowDir, colDir, pieceColor) {
     }
   }
 }
+
+// TODO having an issue with piece capture check assets folder for a video
 
 function resetBackgroundColors() {
   const squares = document.querySelectorAll('.board-square');
