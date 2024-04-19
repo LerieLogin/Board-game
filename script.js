@@ -68,140 +68,48 @@ function makeBoard() {
 makeBoard();
 
 function capturePiece(clickedSquare) {
-  console.log(clickedSquare.firstChild)
-  console.log(clickedPiece)
+  console.log(clickedSquare);
 
-  const myPiece = isWhiteTurn ? "white" : "black";
-  const opponentPiece = !isWhiteTurn ? "white" : "black";
-  for (let row = 0; row < 8; row++) {
-    for (let col = 0; col < 8; col++) {
-      const square1 = document.getElementById(`square-${row}-${col}`);
-      const square2 = document.getElementById(`square-${row}-${col + 1}`);
-      const square3 = document.getElementById(`square-${row}-${col + 2}`);
+  // Reset background color of all squares
+  const squares = document.querySelectorAll('.board-square');
+  squares.forEach(square => square.style.backgroundColor = '');
 
-      if (square1 && square2 && square3) {
-        const piece1 = square1.querySelector(".black-piece")
-          ? "black"
-          : square1.querySelector(".white-piece")
-          ? "white"
-          : null;
-        const piece2 = square2.querySelector(".black-piece")
-          ? "black"
-          : square2.querySelector(".white-piece")
-          ? "white"
-          : null;
-        const piece3 = square3.querySelector(".black-piece")
-          ? "black"
-          : square3.querySelector(".white-piece")
-          ? "white"
-          : null;
-        if (piece1 === myPiece && piece2 === opponentPiece && piece3 === null && clickedPiece === clickedSquare.firstChild) {
-          // console.log(piece1, piece2, piece3)
-          
-          console.log("horz");
-          square3.style.backgroundColor = "blue";
+  // Highlight the clicked square
+  clickedSquare.style.backgroundColor = 'yellow';
 
-          
+  // Find the clicked piece
+  const clickedPiece = clickedSquare.querySelector('.white-piece, .black-piece');
+  if (!clickedPiece) return; // Exit if no piece is clicked
 
+  // Get the color of the clicked piece
+  const pieceColor = clickedPiece.classList.contains('white-piece') ? 'white' : 'black';
 
-          
-        }
-      }
-    }
-  }
+  // Iterate through neighboring squares to check for capture options
+  const row = parseInt(clickedSquare.id.split('-')[1]);
+  const col = parseInt(clickedSquare.id.split('-')[2]);
 
-  for (let row = 0; row < 8; row++) {
-    for (let col = 0; col < 8; col++) {
-      const square1 = document.getElementById(`square-${row}-${col}`);
-      const square2 = document.getElementById(`square-${row}-${col - 1}`);
-      const square3 = document.getElementById(`square-${row}-${col - 2}`);
+  // Check horizontally
+  checkCaptureOption(row, col, 0, 1, pieceColor); // Right direction
+  checkCaptureOption(row, col, 0, -1, pieceColor); // Left direction
 
-      if (square1 && square2 && square3) {
-        const piece1 = square1.querySelector(".black-piece")
-          ? "black"
-          : square1.querySelector(".white-piece")
-          ? "white"
-          : null;
-        const piece2 = square2.querySelector(".black-piece")
-          ? "black"
-          : square2.querySelector(".white-piece")
-          ? "white"
-          : null;
-        const piece3 = square3.querySelector(".black-piece")
-          ? "black"
-          : square3.querySelector(".white-piece")
-          ? "white"
-          : null;
-        if (piece1 === myPiece && piece2 === opponentPiece && piece3 === null) {
-          // console.log(piece1, piece2, piece3)
-          console.log("horz");
-          square3.style.backgroundColor = "blue";
-        }
-      }
-    }
-  }
+  // Check vertically
+  checkCaptureOption(row, col, 1, 0, pieceColor); // Down direction
+  checkCaptureOption(row, col, -1, 0, pieceColor); // Up direction
+}
 
-  for (let col = 0; col < 8; col++) {
-    for (let row = 0; row < 8; row++) {
-      const square1 = document.getElementById(`square-${row}-${col}`);
-      const square2 = document.getElementById(`square-${row + 1}-${col}`);
-      const square3 = document.getElementById(`square-${row + 2}-${col}`);
+function checkCaptureOption(row, col, rowDir, colDir, pieceColor) {
+  const square1 = document.getElementById(`square-${row}-${col}`);
+  const square2 = document.getElementById(`square-${row + rowDir}-${col + colDir}`);
+  const square3 = document.getElementById(`square-${row + 2 * rowDir}-${col + 2 * colDir}`);
 
-      if (square1 && square2 && square3) {
-        const piece1 = square1.querySelector(".black-piece")
-          ? "black"
-          : square1.querySelector(".white-piece")
-          ? "white"
-          : null;
-        const piece2 = square2.querySelector(".black-piece")
-          ? "black"
-          : square2.querySelector(".white-piece")
-          ? "white"
-          : null;
-        const piece3 = square3.querySelector(".black-piece")
-          ? "black"
-          : square3.querySelector(".white-piece")
-          ? "white"
-          : null;
+  if (square1 && square2 && square3) {
+    const piece1 = square1.querySelector('.black-piece, .white-piece');
+    const piece2 = square2.querySelector('.black-piece, .white-piece');
+    const piece3 = square3.querySelector('.black-piece, .white-piece');
 
-        if (piece1 === myPiece && piece2 === opponentPiece && piece3 === null) {
-          // console.log(piece1, piece2, piece3)
-          console.log("vert");
-          square3.style.backgroundColor = "red";
-        }
-      }
-    }
-  }
-
-  for (let col = 0; col < 8; col++) {
-    for (let row = 0; row < 8; row++) {
-      const square1 = document.getElementById(`square-${row}-${col}`);
-      const square2 = document.getElementById(`square-${row - 1}-${col}`);
-      const square3 = document.getElementById(`square-${row - 2}-${col}`);
-
-      if (square1 && square2 && square3) {
-        const piece1 = square1.querySelector(".black-piece")
-          ? "black"
-          : square1.querySelector(".white-piece")
-          ? "white"
-          : null;
-        const piece2 = square2.querySelector(".black-piece")
-          ? "black"
-          : square2.querySelector(".white-piece")
-          ? "white"
-          : null;
-        const piece3 = square3.querySelector(".black-piece")
-          ? "black"
-          : square3.querySelector(".white-piece")
-          ? "white"
-          : null;
-
-        if (piece1 === myPiece && piece2 === opponentPiece && piece3 === null) {
-          // console.log(piece1, piece2, piece3)
-          console.log("vert");
-          square3.style.backgroundColor = "red";
-        }
-      }
+    if (piece1 && piece2 && !piece3 && piece2.classList.contains(pieceColor === 'white' ? 'black-piece' : 'white-piece')) {
+      // Highlight the third square as a capture option
+      square3.style.backgroundColor = 'red';
     }
   }
 }
