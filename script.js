@@ -4,11 +4,15 @@ const btn = document.getElementById("submit-score");
 let isWhiteTurn = true;
 let lastPlacedPiece = null;
 let lastPlacedSquare = null;
-let selectedPiece = null;
+let clickedSquare = null;
+let clickedPiece = null;
 
 board.classList.add("board");
 
 function makeBoard() {
+  const board = document.createElement("div");
+  board.classList.add("board");
+
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 8; col++) {
       const boardSquare = document.createElement("div");
@@ -18,6 +22,8 @@ function makeBoard() {
         event.preventDefault();
         const squareId = this.id;
         const pieceContainer = this;
+        
+        clickedPiece = this.querySelector(".white-piece") || this.querySelector(".black-piece");
         if (isWhiteTurn) {
           console.log("white turn");
           if (pieceContainer.children.length === 0) {
@@ -31,8 +37,7 @@ function makeBoard() {
             isWhiteTurn = !isWhiteTurn;
           } else if (boardSquare.querySelector(".white-piece")) {
             console.log("There is already a piece there.");
-            capturePiece();
-
+            capturePiece(this);
             return;
           }
         } else {
@@ -48,7 +53,7 @@ function makeBoard() {
             isWhiteTurn = !isWhiteTurn;
           } else if (boardSquare.querySelector(".black-piece")) {
             console.log("There is already a piece there.");
-            capturePiece();
+            capturePiece(this);
             return;
           }
         }
@@ -62,7 +67,10 @@ function makeBoard() {
 
 makeBoard();
 
-function capturePiece() {
+function capturePiece(clickedSquare) {
+  console.log(clickedSquare.firstChild)
+  console.log(clickedPiece)
+
   const myPiece = isWhiteTurn ? "white" : "black";
   const opponentPiece = !isWhiteTurn ? "white" : "black";
   for (let row = 0; row < 8; row++) {
@@ -87,10 +95,16 @@ function capturePiece() {
           : square3.querySelector(".white-piece")
           ? "white"
           : null;
-        if (piece1 === myPiece && piece2 === opponentPiece && piece3 === null) {
+        if (piece1 === myPiece && piece2 === opponentPiece && piece3 === null && clickedPiece === clickedSquare.firstChild) {
           // console.log(piece1, piece2, piece3)
+          
           console.log("horz");
           square3.style.backgroundColor = "blue";
+
+          
+
+
+          
         }
       }
     }
@@ -444,7 +458,7 @@ function calculateScores() {
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 6; col++) {
       const square1 = document.getElementById(`square-${row}-${col}`);
-      const square2 = document.getElementById(`square-${row}-${col}`);
+      const square2 = document.getElementById(`square-${row}-${col + 1}`);
       const square3 = document.getElementById(`square-${row}-${col + 2}`);
 
       if (square1 && square2 && square3) {
