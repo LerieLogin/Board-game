@@ -38,6 +38,7 @@ function makeBoard() {
           } else if (boardSquare.querySelector(".white-piece")) {
             console.log("There is already a piece there.");
             capturePiece(this);
+            
             return;
           }
         } else {
@@ -54,6 +55,7 @@ function makeBoard() {
           } else if (boardSquare.querySelector(".black-piece")) {
             console.log("There is already a piece there.");
             capturePiece(this);
+            
             return;
           }
         }
@@ -109,10 +111,43 @@ function checkCaptureOption(row, col, rowDir, colDir, pieceColor) {
 
     if (piece1 && piece2 && !piece3 && piece2.classList.contains(pieceColor === 'white' ? 'black-piece' : 'white-piece')) {
       // Highlight the third square as a capture option
-      square3.style.backgroundColor = 'red';
+      square3.style.backgroundColor = "red"
+      console.log(square1, square2, square3)
+      square3.addEventListener("click", function (event) {
+        event.preventDefault();
+        const squareId = this.id;
+        const pieceContainer = this;
+      
+        if (this.style.backgroundColor === 'red') {
+          square3.appendChild(piece1);
+          square2.removeChild(piece2);
+      
+          resetBackgroundColors();
+          squareCheck()
+        }
+      });
+      
+    
     }
   }
 }
+
+function resetBackgroundColors() {
+  const squares = document.querySelectorAll('.board-square');
+  squares.forEach(square => square.style.backgroundColor = '');
+}
+
+
+function squareCheck() {
+  const squares = document.querySelectorAll('.board-square')
+  squares.forEach(square => {
+    while (square.children.length > 1) {
+      square.removeChild(square.firstChild);
+    }
+  });
+}
+
+
 
 function fourRowCheck() {
   for (let row = 0; row < 8; row++) {
@@ -516,3 +551,5 @@ function calculateScores() {
 }
 
 btn.addEventListener("click", calculateScores);
+
+
